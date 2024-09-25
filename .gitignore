@@ -1,0 +1,10 @@
+.vercel
+uploads
+./uploads
+node_modules
+./node_modules
+./dist
+dist
+
+package-lock.json
+yarn.lock
