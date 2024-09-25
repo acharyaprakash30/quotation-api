@@ -1,19 +1,17 @@
-import multer, { FileFilterCallback } from "multer";
+import multer from "multer";
 import path from "path";
-import { Request, Response, NextFunction } from "express";
-import fs from 'fs';
+import fs from "fs";
+import { fileURLToPath } from 'url';
 
-declare module "express-serve-static-core" {
-  interface Request {
-    fileError?: string;
-  }
-}
+// Simulate __dirname in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     const uploadPath = path.join(__dirname, '../../uploads/');
     if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true }); // recursive option ensures that nested directories are created if needed
+      fs.mkdirSync(uploadPath, { recursive: true });
     }
     callback(null, uploadPath);
   },
@@ -23,11 +21,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const fileFilter = (
-  req: Request,
-  file: Express.Multer.File,
-  cb: FileFilterCallback
-) => {
+const fileFilter = (req, file, cb) => {
   const allowedMimeTypes = ["image/jpeg", "image/jpg", "image/png"];
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
@@ -37,8 +31,8 @@ const fileFilter = (
   }
 };
 
-const uploadMiddleware = (fields: { name: string; maxCount: number }[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+const uploadMiddleware = (fields) => {
+  return (req, res, next) => {
     const upload = multer({
       storage: storage,
       limits: {
@@ -47,7 +41,7 @@ const uploadMiddleware = (fields: { name: string; maxCount: number }[]) => {
       fileFilter: fileFilter,
     }).fields(fields);
 
-    upload(req, res, (err: any) => {
+    upload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         return res.status(500).json({
           success: false,
