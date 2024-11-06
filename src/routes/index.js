@@ -35,6 +35,8 @@ router
     ]),
     async (req, res) => {
       try {
+
+
         let { name, manager, phoneNumber, taxAmount, totalAmount, quotationServices, ...rest } = req.body;
         let sum = 0;
 
@@ -45,9 +47,9 @@ router
         let quotationService = JSON.parse(quotationServices);
         if (quotationService && quotationService.length > 0) {
           quotationService.map((item) => {
-            sum = sum + Number(item.hours) * Number(item.price);
+            let unitPrice = Number(item.price) * Number(item.hours);
+            sum = isNaN(unitPrice) ? Number(sum) + 0 : Number(sum) + unitPrice;
           });
-
           if (sum < 0) {
             throw new Error("Tax amount should not be greater than total amount");
           }
@@ -72,13 +74,14 @@ router
             where: { id: company.id },
             data: companyData,
           });
+          console.log("companyData", company);
           await prisma.quotation.update({
             where: { id: quotation.id },
             data: {
               ...rest,
-              companyId: company.id,
+              companyId: company?.id,
               taxAmount: Number(taxAmount),
-              totalAmount: Number(sum),
+              totalAmount: Number(sum.toFixed(2)),
               quotationServices: quotationServices,
             },
           });
@@ -98,7 +101,7 @@ router
               ...rest,
               companyId: newCompany.id,
               taxAmount: Number(taxAmount),
-              totalAmount: Number(sum),
+              totalAmount: Number(sum.toFixed(2)),
               quotationServices: quotationServices,
             },
           });

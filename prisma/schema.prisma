@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -45,10 +45,10 @@ model Quotation {
   taxAmount          Float    @default(0)
   accountNumber      String
   bankName           String
-  termsAndConditions String
+  termsAndConditions String   @db.Text
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-  companyId          Int
+  companyId          Int?
   quotationServices  Json
   company            Company?  @relation(fields: [companyId], references: [id])
 }
