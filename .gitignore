@@ -1,5 +1,4 @@
 .vercel
-uploads
 # ./uploads
 node_modules
 ./node_modules
