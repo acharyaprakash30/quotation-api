@@ -32,12 +32,13 @@ router
     uploadMiddleware([
       { name: "logo", maxCount: 1 },
       { name: "managerSignature", maxCount: 1 },
+      { name: "clientLogo", maxCount: 1 },
     ]),
     async (req, res) => {
       try {
 
 
-        let { name, manager, phoneNumber, taxAmount, totalAmount, quotationServices, ...rest } = req.body;
+        let { name, manager, phoneNumber, email, address, taxAmount, totalAmount, quotationServices, ...rest } = req.body;
         let sum = 0;
 
         if (!name || !manager || !phoneNumber || !taxAmount || !totalAmount || !quotationServices) {
@@ -67,6 +68,8 @@ router
           manager,
           managerSignature,
           phoneNumber,
+          address,
+          email
         };
 
         if (company && quotation) {
@@ -93,6 +96,8 @@ router
               manager,
               managerSignature,
               phoneNumber,
+              address,
+              email
             },
           });
 
