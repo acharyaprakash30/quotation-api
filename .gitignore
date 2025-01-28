@@ -1,6 +1,6 @@
 .vercel
 uploads
-./uploads
+# ./uploads
 node_modules
 ./node_modules
 ./dist
