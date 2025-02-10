@@ -28,7 +28,7 @@ datasource db {
 model Company {
   id               Int         @id @default(autoincrement())
   name             String
-  logo             String
+  logo             String?
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   manager          String
@@ -49,6 +49,8 @@ model Quotation {
   taxAmount          Float    @default(0)
   accountNumber      String
   bankName           String
+  acountName         String?
+  swiftCode          String?
   termsAndConditions String   @db.Text
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -58,4 +60,5 @@ model Quotation {
   clientEmail        String?
   quotationDate      String?
   validDate          String?
+  
 }

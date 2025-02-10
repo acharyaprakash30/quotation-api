@@ -30,9 +30,9 @@ router
   })
   .post(
     uploadMiddleware([
-      { name: "logo", maxCount: 1 },
+      // { name: "logo", maxCount: 1 },
       { name: "managerSignature", maxCount: 1 },
-      { name: "clientLogo", maxCount: 1 },
+      // { name: "clientLogo", maxCount: 1 },
     ]),
     async (req, res) => {
       try {
